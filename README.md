@@ -1,6 +1,6 @@
 # Kubernetes Bootstrap
 
-Deploy a platform on Google Cloud by setting up the basic infrastructure using variables.
+Deploy a platform on Google Cloud by setting up basic infrastructure using variables.
 
 ### Features
 
