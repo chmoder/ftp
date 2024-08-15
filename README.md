@@ -1,27 +1,41 @@
 # Kubernetes Bootstrap
 
+Deploy a platform on Google Cloud by setting up the basic infrastructure using variables.
+
 ### Features
 
-- Dynamic name for the product
-- Dynamic domain names for ingress and certificates
-- Automatic SSL Cert generation
-- NodePort LoadBalancer service for deployments
-- GCE Ingress tls setup
-- Frontend LB HTTP -> HTTPS redirect
+- IAM
+- Separate Network
+- Kubernetes Cluster
+- Cert Manager SSL certificate generation and management
+- TLS GCE Ingress
+- HTTP -> HTTPS redirect
+- Variable defined name for the infrastructure components
+- Variable defined domain names for ingress and certificates
 
 ### TODO
 
+- Test on a new GCP project
 - Automatic dns record (set A record to new static IP)
+- Variables for Cluster and Node Pool configurations machine type, HPA, etc.
+- Add monitoring (new relic)
+- CloudSQL (Postgres, MySQL)
+- Caching (Redis, MemoryStore)
+- ...
 
 ### Notes
 
 - You have to update your `ingress_hosts` A records in order to get traffic to your site. And to generate the SSL certificate.
+- You may need to modify the `certmanager` modules to support your particular certificate needs. Current implementation uses [dns01 challenge solver with cloudflare](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/).
 
 ### Usage
 
-- set variables (`terraform.tfvars` for example)
-- terraform init
-- terraform apply
+- Create GCP project
+- Create terraform admin service account
+- Download SA credentials JSON
+- Set variables (`terraform.tfvars` for example)
+- `terraform init`
+- `terraform apply`
 
 ### Variables
 
