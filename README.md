@@ -26,7 +26,7 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 ### Notes
 
 - You have to update your `ingress_hosts` A records in order to get traffic to your site. And to generate the SSL certificate.
-- You may need to modify the `certmanager` modules to support your particular certificate needs. Current implementation uses [dns01 challenge solver with cloudflare](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/).
+- You may need to modify the `certmanager` module to support your particular certificate needs. Current implementation uses [dns01 challenge solver with cloudflare](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/).
 
 ### Usage
 
