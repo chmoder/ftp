@@ -1,5 +1,4 @@
 # add roles to the terraform admin service account
-
 resource "google_project_iam_binding" "cluster_admin" {
   project = var.project_id
   role    = "roles/container.clusterAdmin"
