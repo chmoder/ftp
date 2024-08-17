@@ -75,8 +75,8 @@ provider "cloudflare" {
   api_key = var.cloudflare_api_key
 }
 
-# provider "newrelic" {
-#   account_id = var.nr_account_id
-#   api_key    = ""
-#   region     = "US"
-# }
+provider "newrelic" {
+  account_id = var.nr_account_id
+  api_key    = var.nr_api_key
+  region     = "US"
+}
