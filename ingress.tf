@@ -17,8 +17,8 @@ resource "kubernetes_ingress_v1" "example" {
   spec {
     ingress_class_name = "gce"
     tls {
-      # hosts       = [var.ingress_hosts.ftp_svc]
-      hosts       = values(var.ingress_hosts)
+      hosts       = [var.ingress_hosts.ftp_svc.domain]
+      # hosts       = values(var.ingress_hosts)
       secret_name = var.cluster_issuer_private_key_secret_name
     }
 
@@ -32,7 +32,7 @@ resource "kubernetes_ingress_v1" "example" {
     }
 
     rule {
-      host = var.ingress_hosts.ftp_svc
+      host = var.ingress_hosts.ftp_svc.domain
       http {
         path {
           path = "/*"

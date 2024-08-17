@@ -43,7 +43,7 @@ module "cert_manager" {
       },
       selector = {
         dnsZones = [
-          var.ingress_hosts.ftp_svc
+          var.ingress_hosts.ftp_svc.domain
         ]
       }
     },
@@ -57,9 +57,8 @@ module "cert_manager" {
   ]
 
   certificates = {
-    #  "${replace(var.ingress_hosts.ftp_svc, ".", "_")}" = {
-    "${var.ingress_hosts.ftp_svc}" = {
-      dns_names = [var.ingress_hosts.ftp_svc]
+    "${var.ingress_hosts.ftp_svc.domain}" = {
+      dns_names = [var.ingress_hosts.ftp_svc.domain]
     }
   }
 

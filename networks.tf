@@ -92,3 +92,13 @@ resource "kubectl_manifest" "app_frontend_config" {
 
   depends_on = [google_container_node_pool.primary_nodes]
 }
+
+resource "cloudflare_record" "example" {
+  name    = "${var.ingress_hosts.ftp_svc.domain}-dns-a-record"
+
+  zone_id = var.ingress_hosts.ftp_svc.zone_id
+  content = google_compute_global_address.ingress.address
+  type    = "A"
+  ttl     = 60
+  allow_overwrite = true
+}

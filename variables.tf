@@ -39,7 +39,7 @@ variable "cloudflare_api_key" {
 }
 
 variable "ingress_hosts" {
-  type        = map(string)
+  type        = map(map(string))
   description = "hostnames (domains) that will be used in certs and/or routing"
 }
 
@@ -64,8 +64,12 @@ variable "firewall_allow_https" {
   default = "https-enabled"
 }
 
-# TODO: implement
-# variable "nr_account_id" {
-#   type = number
-#   description = "new relic account ID"
-# }
+variable "nr_account_id" {
+  type = number
+  description = "new relic account ID"
+}
+
+variable "nr_api_key" {
+  type = string
+  description = "new relic api key"
+}

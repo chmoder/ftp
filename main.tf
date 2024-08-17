@@ -19,6 +19,10 @@ terraform {
       source  = "hashicorp/google"
       version = "5.41.0"
     }
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "4.39.0"
+    }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "2.32.0"
@@ -33,7 +37,7 @@ terraform {
     }
     newrelic = {
       source  = "newrelic/newrelic"
-      version = "3.42.1"
+      version = "3.42.3"
     }
   }
 }
@@ -66,7 +70,11 @@ provider "helm" {
   }
 }
 
-# TODO: implement newrelic
+provider "cloudflare" {
+  email = var.cloudflare_email
+  api_key = var.cloudflare_api_key
+}
+
 # provider "newrelic" {
 #   account_id = var.nr_account_id
 #   api_key    = ""
