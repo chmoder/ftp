@@ -20,7 +20,7 @@ terraform {
       version = "5.41.0"
     }
     cloudflare = {
-      source = "cloudflare/cloudflare"
+      source  = "cloudflare/cloudflare"
       version = "4.39.0"
     }
     kubernetes = {
@@ -71,7 +71,7 @@ provider "helm" {
 }
 
 provider "cloudflare" {
-  email = var.cloudflare_email
+  email   = var.cloudflare_email
   api_key = var.cloudflare_api_key
 }
 

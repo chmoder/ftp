@@ -65,11 +65,11 @@ variable "firewall_allow_https" {
 }
 
 variable "nr_account_id" {
-  type = number
+  type        = number
   description = "new relic account ID"
 }
 
 variable "nr_api_key" {
-  type = string
+  type        = string
   description = "new relic api key"
 }
