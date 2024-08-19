@@ -73,3 +73,24 @@ variable "nr_api_key" {
   type        = string
   description = "new relic api key"
 }
+
+variable "nr_sa" {
+  type        = string
+  description = "new relic service accout"
+}
+
+variable "nr_global_license_key" {
+  type        = string
+  description = "global.licenseKey"
+}
+
+variable "nr_newrelic_pixie_api_key" {
+  type        = string
+  description = "newrelic-pixie.apiKey"
+}
+
+variable "nr_pixie_chart_deploy_key" {
+  type        = string
+  description = "pixie-chart.deployKey"
+}
+
