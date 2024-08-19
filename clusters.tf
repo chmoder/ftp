@@ -11,6 +11,12 @@ resource "google_container_cluster" "primary" {
   initial_node_count       = 1
   deletion_protection      = false
 
+  maintenance_policy {
+    daily_maintenance_window {
+      start_time = "07:00"
+    }
+  }
+
   depends_on = [google_project_iam_binding.cluster_admin]
 }
 
@@ -24,19 +30,16 @@ resource "google_container_node_pool" "primary_nodes" {
 
   node_config {
     spot         = true
-    machine_type = "e2-standard-2"
+    machine_type = "n2-standard-2"
+    disk_size_gb = 20
+    disk_type    = "pd-standard"
 
     tags = [var.firewall_allow_http, var.firewall_allow_https]
-
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    service_account = var.sa_email
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
   }
 
-  lifecycle {
-    ignore_changes = [node_config]
+  management {
+    auto_upgrade = true
+    auto_repair  = true
   }
 
   depends_on = [google_project_iam_binding.cluster_admin]
