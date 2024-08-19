@@ -8,7 +8,7 @@ variable "project_region" {
   description = "GCP Project Region"
 }
 
-variable "credentials_file_path" {
+variable "sa_credentials_file_path" {
   type        = string
   description = "file path to google service account credentials"
 }

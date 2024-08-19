@@ -43,7 +43,7 @@ terraform {
 }
 
 provider "google" {
-  credentials = file(var.credentials_file_path)
+  credentials = file(var.sa_credentials_file_path)
   project     = var.project_id
   region      = var.project_region
 }

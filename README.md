@@ -12,6 +12,8 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 - HTTP -> HTTPS redirect
 - Variable defined name for the infrastructure components
 - Variable defined domain names for ingress and certificates
+- New Relic and pixie integration
+- Cloudflare DNS A record create and update for static ingress IP
 
 ### TODO
 
@@ -44,16 +46,18 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 name_prefix_kebab                      = "some-svc"
 project_id                             = "project-id"
 project_region                         = "us-central1"
-credentials_file_path                  = "/path/to/sa/creds.json"
+sa_credentials_file_path                  = "/path/to/sa/creds.json"
 sa_email                               = "terraform-admin@project-id.iam.gserviceaccount.com"
+
+# https://github.com/cert-manager/cert-manager
 cluster_issuer_private_key_secret_name = "cert-manager-private-key"
+cluster_issuer_email = "your.email@gmail.com"
 ingress_hosts = {
   ftp_svc = {
     "zone_id" = "XXX"
     "domain"  = "some-svc.example.com"
   }
 }
-cluster_issuer_email = "your.email@gmail.com"
 
 cloudflare_email     = "your.email@gmail.com"
 cloudflare_api_key   = "XXX"
