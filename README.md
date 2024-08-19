@@ -15,17 +15,18 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 
 ### TODO
 
+- Refactor using module composition and Dependency Inversion
 - Test on a new GCP project
-- Automatic dns record (set A record to new static IP)
+- ~~Automatic dns record (set A record to new static IP)~~
 - Variables for Cluster and Node Pool configurations machine type, HPA, etc.
-- Add monitoring (new relic)
+- ~~Add monitoring (new relic)~~
 - CloudSQL (Postgres, MySQL)
 - Caching (Redis, MemoryStore)
 - ...
 
 ### Notes
 
-- You have to update your `ingress_hosts` A records in order to get traffic to your site. And to generate the SSL certificate.
+- ~~You have to update your `ingress_hosts` A records in order to get traffic to your site. And to generate the SSL certificate.~~
 - You may need to modify the `certmanager` module to support your particular certificate needs. Current implementation uses [dns01 challenge solver with cloudflare](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/).
 
 ### Usage
@@ -40,16 +41,29 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 ### Variables
 
 ```SHELL
+name_prefix_kebab                      = "some-svc"
 project_id                             = "project-id"
 project_region                         = "us-central1"
 credentials_file_path                  = "/path/to/sa/creds.json"
 sa_email                               = "terraform-admin@project-id.iam.gserviceaccount.com"
 cluster_issuer_private_key_secret_name = "cert-manager-private-key"
 ingress_hosts = {
-  ftp_svc = "some-svc.example.com"
+  ftp_svc = {
+    "zone_id" = "XXX"
+    "domain"  = "some-svc.example.com"
+  }
 }
 cluster_issuer_email = "your.email@gmail.com"
+
 cloudflare_email     = "your.email@gmail.com"
-name_prefix_kebab    = "some-svc"
 cloudflare_api_key   = "XXX"
+
+# https://docs.newrelic.com/install/kubernetes/
+nr_account_id             = 1234567
+nr_api_key                = "NRAK-XXX"
+nr_sa                     = "randomAccount@newrelic-gcp.iam.gserviceaccount.com"
+nr_global_license_key     = "XXX"
+nr_newrelic_pixie_api_key = "XXX"
+nr_pixie_chart_deploy_key = "XXX"
+
 ```
