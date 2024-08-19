@@ -19,11 +19,11 @@ resource "google_container_node_pool" "primary_nodes" {
   name           = "${var.name_prefix_kebab}-node-pool"
   location       = google_container_cluster.primary.location
   cluster        = google_container_cluster.primary.name
-  node_count     = 1
+  node_count     = 2
   node_locations = ["${var.project_region}-f"]
 
   node_config {
-    preemptible  = false
+    spot         = true
     machine_type = "e2-standard-2"
 
     tags = [var.firewall_allow_http, var.firewall_allow_https]
