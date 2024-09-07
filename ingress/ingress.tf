@@ -1,3 +1,20 @@
+# This forwards HTTP -> HTTPS on a frontend LB
+resource "kubectl_manifest" "app_frontend_config" {
+  wait_for_rollout = true
+  yaml_body = yamlencode({
+    apiVersion = "networking.gke.io/v1beta1"
+    kind       = "FrontendConfig"
+    metadata = {
+      name = "ingress-fc"
+    }
+    spec = {
+      redirectToHttps = {
+        enabled = true
+      }
+    }
+  })
+}
+
 # GCE ingress with SSL
 # Configure your routes here
 resource "kubernetes_ingress_v1" "example" {
@@ -8,7 +25,7 @@ resource "kubernetes_ingress_v1" "example" {
 
     annotations = {
       "kubernetes.io/ingress.class"                 = "gce"
-      "kubernetes.io/ingress.global-static-ip-name" = google_compute_global_address.ingress.name
+      "kubernetes.io/ingress.global-static-ip-name" = var.google_compute_global_address_ingress_name
       "cert-manager.io/cluster-issuer"              = module.cert_manager.cluster_issuer_name
       "networking.gke.io/v1beta1.FrontendConfig"    = kubectl_manifest.app_frontend_config.name
     }

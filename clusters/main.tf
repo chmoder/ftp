@@ -4,7 +4,7 @@ resource "google_container_cluster" "primary" {
   location       = var.project_region
   node_locations = ["${var.project_region}-f"]
 
-  network = google_compute_network.example.id
+  network = var.example_network_id
 
 
   remove_default_node_pool = true

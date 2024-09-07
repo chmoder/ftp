@@ -74,25 +74,6 @@ resource "google_compute_firewall" "allow_https" {
   target_tags = [var.firewall_allow_https]
 }
 
-# This forwards HTTP -> HTTPS on a frontend LB
-resource "kubectl_manifest" "app_frontend_config" {
-  wait_for_rollout = true
-  yaml_body = yamlencode({
-    apiVersion = "networking.gke.io/v1beta1"
-    kind       = "FrontendConfig"
-    metadata = {
-      name = "ingress-fc"
-    }
-    spec = {
-      redirectToHttps = {
-        enabled = true
-      }
-    }
-  })
-
-  depends_on = [google_container_node_pool.primary_nodes]
-}
-
 resource "cloudflare_record" "example" {
   zone_id         = var.ingress_hosts.ftp_svc.zone_id
   name            = var.ingress_hosts.ftp_svc.domain
