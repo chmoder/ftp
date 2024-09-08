@@ -1,18 +1,4 @@
 data "google_client_config" "example" {}
-
-# locals {
-#   k8_provider_config = {
-#     host                   = "https://${google_container_cluster.primary.endpoint}"
-#     token                  = data.google_client_config.example.access_token
-#     cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
-
-#     ignore_annotations = [
-#       "^autopilot\\.gke\\.io\\/.*",
-#       "^cloud\\.google\\.com\\/.*"
-#     ]
-#   }
-# }
-
 terraform {
   required_providers {
     google = {
@@ -45,20 +31,6 @@ terraform {
     }
   }
 }
-
-# provider "kubernetes" {
-#   host                   = local.k8_provider_config.host
-#   token                  = local.k8_provider_config.token
-#   cluster_ca_certificate = local.k8_provider_config.cluster_ca_certificate
-
-#   ignore_annotations = local.k8_provider_config.ignore_annotations
-# }
-
-# provider "kubectl" {
-#   host                   = local.k8_provider_config.host
-#   token                  = local.k8_provider_config.token
-#   cluster_ca_certificate = local.k8_provider_config.cluster_ca_certificate
-# }
 
 provider "google" {
   credentials = file(var.sa_credentials_file_path)
@@ -132,8 +104,6 @@ module "apis" {
   source = "./apis"
 
   project_id = var.project_id
-
-  # depends_on = [module.providers]
 }
 
 module "iam" {
@@ -164,8 +134,6 @@ module "clusters" {
   project_region                             = var.project_region
   example_network_id                         = module.networks.example_network_id
   google_compute_global_address_ingress_name = module.networks.google_compute_global_address_ingress_name
-  # google_container_cluster_primary_name = google_container_cluster.primary.name
-  # google_container_cluster_primary_location = google_container_cluster.primary.location
 
   depends_on = [module.networks]
 }
@@ -197,7 +165,7 @@ module "services" {
   name_prefix_kebab                     = var.name_prefix_kebab
   kubernetes_deployment_v1_example_spec = module.deployments.kubernetes_deployment_v1_example_spec
 
-  depends_on = [module.deployments, module.certmanager_a]
+  depends_on = [module.certmanager_a]
 }
 
 module "ingress" {
