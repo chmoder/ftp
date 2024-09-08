@@ -21,6 +21,4 @@ resource "kubernetes_service_v1" "example" {
   timeouts {
     create = "3m"
   }
-
-  depends_on = [google_compute_global_address.ingress, module.cert_manager]
 }

@@ -18,3 +18,8 @@ variable "firewall_allow_https" {
   type    = string
   default = "https-enabled"
 }
+
+variable "ingress_hosts" {
+  type        = map(map(string))
+  description = "hostnames (domains) that will be used in certs and/or routing"
+}

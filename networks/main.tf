@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.39.0"
+    }
+  }
+}
+
 # resource "google_compute_address" "ingress" {
 #   name         = "${var.name_prefix_kebab}-regional-ip-address"
 #   address_type = "EXTERNAL"

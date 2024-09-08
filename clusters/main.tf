@@ -1,3 +1,18 @@
+data "google_client_config" "example" {}
+
+locals {
+  k8_provider_config = {
+    host                   = "https://${google_container_cluster.primary.endpoint}"
+    token                  = data.google_client_config.example.access_token
+    cluster_ca_certificate = base64decode(google_container_cluster.primary.master_auth[0].cluster_ca_certificate)
+
+    ignore_annotations = [
+      "^autopilot\\.gke\\.io\\/.*",
+      "^cloud\\.google\\.com\\/.*"
+    ]
+  }
+}
+
 # Cluster
 resource "google_container_cluster" "primary" {
   name           = "${var.name_prefix_kebab}-gke-cluster"
@@ -16,8 +31,6 @@ resource "google_container_cluster" "primary" {
       start_time = "07:00"
     }
   }
-
-  depends_on = [google_project_iam_binding.cluster_admin]
 }
 
 # Node Pool
@@ -41,6 +54,4 @@ resource "google_container_node_pool" "primary_nodes" {
     auto_upgrade = true
     auto_repair  = true
   }
-
-  depends_on = [google_project_iam_binding.cluster_admin]
 }

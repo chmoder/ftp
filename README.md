@@ -17,13 +17,14 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 
 ### TODO
 
-- Refactor using module composition and Dependency Inversion
+- ~~Refactor using module composition and Dependency Inversion~~
 - Test on a new GCP project
 - ~~Automatic dns record (set A record to new static IP)~~
 - Variables for Cluster and Node Pool configurations machine type, HPA, etc.
 - ~~Add monitoring (new relic)~~
 - CloudSQL (Postgres, MySQL)
 - Caching (Redis, MemoryStore)
+- Use gitops instead of helm charts - maybe for new relic
 - ...
 
 ### Notes

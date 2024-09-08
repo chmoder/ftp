@@ -16,3 +16,16 @@ variable "google_compute_global_address_ingress_name" {
 variable "kubernetes_deployment_v1_example_spec" {
   type = list
 }
+
+variable "kubernetes_service_v1_example" {
+ type = any
+}
+
+variable "cert_manager_cluster_issuer_name" {
+  type = string
+}
+
+variable "ingress_hosts" {
+  type        = map(map(string))
+  description = "hostnames (domains) that will be used in certs and/or routing"
+}

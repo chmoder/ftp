@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    kubectl = {
+      source  = "alekc/kubectl"
+      version = "2.0.4"
+    }
+  }
+}
 # This forwards HTTP -> HTTPS on a frontend LB
 resource "kubectl_manifest" "app_frontend_config" {
   wait_for_rollout = true
@@ -26,7 +34,7 @@ resource "kubernetes_ingress_v1" "example" {
     annotations = {
       "kubernetes.io/ingress.class"                 = "gce"
       "kubernetes.io/ingress.global-static-ip-name" = var.google_compute_global_address_ingress_name
-      "cert-manager.io/cluster-issuer"              = module.cert_manager.cluster_issuer_name
+      "cert-manager.io/cluster-issuer"              = var.cert_manager_cluster_issuer_name
       "networking.gke.io/v1beta1.FrontendConfig"    = kubectl_manifest.app_frontend_config.name
     }
   }
@@ -41,9 +49,9 @@ resource "kubernetes_ingress_v1" "example" {
 
     default_backend {
       service {
-        name = kubernetes_service_v1.example.metadata.0.name
+        name = var.kubernetes_service_v1_example.metadata.0.name
         port {
-          number = kubernetes_service_v1.example.spec[0].port[0].port
+          number = var.kubernetes_service_v1_example.spec[0].port[0].port
         }
       }
     }
@@ -55,9 +63,9 @@ resource "kubernetes_ingress_v1" "example" {
           path = "/*"
           backend {
             service {
-              name = kubernetes_service_v1.example.metadata.0.name
+              name = var.kubernetes_service_v1_example.metadata.0.name
               port {
-                number = kubernetes_service_v1.example.spec[0].port[0].port
+                number = var.kubernetes_service_v1_example.spec[0].port[0].port
               }
             }
           }
@@ -65,8 +73,6 @@ resource "kubernetes_ingress_v1" "example" {
       }
     }
   }
-
-  depends_on = [kubernetes_service_v1.example, module.cert_manager]
 
   timeouts {
     create = "2m"

@@ -1,3 +1,16 @@
+terraform {
+  required_providers {
+    newrelic = {
+      source  = "newrelic/newrelic"
+      version = "3.45.0"
+    }
+    graphql = {
+      source  = "sullivtr/graphql"
+      version = "2.5.5"
+    }
+  }
+}
+
 data "graphql_query" "account_id_query" {
   query_variables = {}
   query           = <<EOF
@@ -44,12 +57,12 @@ resource "google_project_iam_binding" "example" {
   ]
 }
 
-# TODO: this errors if NR already has a linked account.  bug?
-resource "newrelic_cloud_gcp_link_account" "example" {
-  account_id = var.nr_account_id
-  project_id = var.project_id
-  name       = "${var.name_prefix_kebab}-nr-gcp-link"
-}
+# # TODO: this errors if NR already has a linked account.  bug?
+# resource "newrelic_cloud_gcp_link_account" "example" {
+#   account_id = var.nr_account_id
+#   project_id = var.project_id
+#   name       = "${var.name_prefix_kebab}-nr-gcp-link"
+# }
 
 resource "newrelic_cloud_gcp_integrations" "example" {
   account_id        = var.nr_account_id
@@ -110,7 +123,7 @@ resource "helm_release" "newrelic_bundle" {
 
   set {
     name  = "global.cluster"
-    value = google_container_cluster.primary.name
+    value = var.google_container_cluster_primary_name
   }
 
   set {

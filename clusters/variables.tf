@@ -23,5 +23,14 @@ variable "example_network_id" {
 }
 
 variable "google_compute_global_address_ingress_name" {
-  type=string
+  type = string
 }
+
+# variable "google_container_cluster_primary_name" {
+#   type = string
+# }
+
+# variable "google_container_cluster_primary_location" {
+#   type = string
+# }
+
