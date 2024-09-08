@@ -48,7 +48,7 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 name_prefix_kebab                      = "some-svc"
 project_id                             = "project-id"
 project_region                         = "us-central1"
-sa_credentials_file_path                  = "/path/to/sa/creds.json"
+sa_credentials_file_path               = "/path/to/sa/creds.json"
 sa_email                               = "terraform-admin@project-id.iam.gserviceaccount.com"
 
 # https://github.com/cert-manager/cert-manager
