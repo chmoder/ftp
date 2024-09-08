@@ -46,6 +46,4 @@ resource "kubernetes_deployment_v1" "example" {
     create = "3m"
     update = "3m"
   }
-
-  depends_on = [google_container_node_pool.primary_nodes]
 }

@@ -17,19 +17,21 @@ Deploy a platform on Google Cloud by setting up basic infrastructure using varia
 
 ### TODO
 
-- Refactor using module composition and Dependency Inversion
+- ~~Refactor using module composition and Dependency Inversion~~
 - Test on a new GCP project
 - ~~Automatic dns record (set A record to new static IP)~~
 - Variables for Cluster and Node Pool configurations machine type, HPA, etc.
 - ~~Add monitoring (new relic)~~
 - CloudSQL (Postgres, MySQL)
 - Caching (Redis, MemoryStore)
+- Use gitops instead of helm charts - maybe for new relic
 - ...
 
 ### Notes
 
 - ~~You have to update your `ingress_hosts` A records in order to get traffic to your site. And to generate the SSL certificate.~~
 - You may need to modify the `certmanager` module to support your particular certificate needs. Current implementation uses [dns01 challenge solver with cloudflare](https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/).
+- There is a bug with the `newrelic_cloud_gcp_link_account` resource https://github.com/newrelic/terraform-provider-newrelic/issues/2733
 
 ### Usage
 

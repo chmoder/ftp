@@ -3,8 +3,6 @@ resource "kubernetes_namespace_v1" "cert_manager_namespace" {
   metadata {
     name = "cert-manager"
   }
-
-  depends_on = [google_container_node_pool.primary_nodes]
 }
 
 # cert-manager dns01 challenge api key secret
@@ -62,5 +60,5 @@ module "cert_manager" {
     }
   }
 
-  depends_on = [google_container_node_pool.primary_nodes, kubernetes_secret_v1.cloudflare_api_token]
+  depends_on = [kubernetes_secret_v1.cloudflare_api_token]
 }

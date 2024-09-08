@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "4.39.0"
+    }
+  }
+}
+
 # resource "google_compute_address" "ingress" {
 #   name         = "${var.name_prefix_kebab}-regional-ip-address"
 #   address_type = "EXTERNAL"
@@ -72,25 +81,6 @@ resource "google_compute_firewall" "allow_https" {
 
   source_tags = [var.firewall_allow_https]
   target_tags = [var.firewall_allow_https]
-}
-
-# This forwards HTTP -> HTTPS on a frontend LB
-resource "kubectl_manifest" "app_frontend_config" {
-  wait_for_rollout = true
-  yaml_body = yamlencode({
-    apiVersion = "networking.gke.io/v1beta1"
-    kind       = "FrontendConfig"
-    metadata = {
-      name = "ingress-fc"
-    }
-    spec = {
-      redirectToHttps = {
-        enabled = true
-      }
-    }
-  })
-
-  depends_on = [google_container_node_pool.primary_nodes]
 }
 
 resource "cloudflare_record" "example" {

@@ -1,3 +1,47 @@
+terraform {
+  required_providers {
+    newrelic = {
+      source  = "newrelic/newrelic"
+      version = "3.45.0"
+    }
+    graphql = {
+      source  = "sullivtr/graphql"
+      version = "2.5.5"
+    }
+  }
+}
+
+data "graphql_query" "account_id_query" {
+  query_variables = {}
+  query           = <<EOF
+    query {
+      actor {
+        account(id: ${var.nr_account_id}) {
+          cloud {
+            linkedAccounts {
+              id
+              name
+              nrAccountId
+            }
+          }
+        }
+      }
+    }
+    EOF
+}
+
+locals {
+  response        = jsondecode(data.graphql_query.account_id_query.query_response)
+  linked_accounts = local.response["data"]["actor"]["account"]["cloud"]["linkedAccounts"]
+
+  linked_account_ids = flatten([
+    for linked_account in local.linked_accounts :
+    linked_account.id if linked_account.name == var.project_id && linked_account.nrAccountId == var.nr_account_id
+  ])
+
+  linked_account_id = length(local.linked_account_ids) > 0 ? local.linked_account_ids[0] : null
+}
+
 resource "google_project_iam_member" "example" {
   project = var.project_id
   role    = "roles/viewer"
@@ -13,16 +57,16 @@ resource "google_project_iam_binding" "example" {
   ]
 }
 
-# TODO: this errors if NR already has a linked account.  bug?
-resource "newrelic_cloud_gcp_link_account" "example" {
-  account_id = var.nr_account_id
-  project_id = var.project_id
-  name       = "${var.name_prefix_kebab}-nr-gcp-link"
-}
+# # TODO: this errors if NR already has a linked account.  bug?
+# resource "newrelic_cloud_gcp_link_account" "example" {
+#   account_id = var.nr_account_id
+#   project_id = var.project_id
+#   name       = "${var.name_prefix_kebab}-nr-gcp-link"
+# }
 
 resource "newrelic_cloud_gcp_integrations" "example" {
   account_id        = var.nr_account_id
-  linked_account_id = newrelic_cloud_gcp_link_account.example.id
+  linked_account_id = local.linked_account_id
   app_engine {}
   big_query {}
   big_table {}
@@ -49,9 +93,9 @@ resource "newrelic_cloud_gcp_integrations" "example" {
   virtual_machines {}
   vpc_access {}
 
-  lifecycle {
-    ignore_changes = [kubernetes[0].metrics_polling_interval, vpc_access[0].metrics_polling_interval]
-  }
+  # lifecycle {
+  #   ignore_changes = [kubernetes[0].metrics_polling_interval, vpc_access[0].metrics_polling_interval]
+  # }
 }
 
 
@@ -61,7 +105,7 @@ resource "helm_release" "newrelic_bundle" {
 
   repository = "https://helm-charts.newrelic.com"
   chart      = "nri-bundle"
-  version    = "5.0.89"
+  version    = "5.0.91"
 
   namespace        = "newrelic"
   create_namespace = true
@@ -79,7 +123,7 @@ resource "helm_release" "newrelic_bundle" {
 
   set {
     name  = "global.cluster"
-    value = google_container_cluster.primary.name
+    value = var.google_container_cluster_primary_name
   }
 
   set {
@@ -144,6 +188,6 @@ resource "helm_release" "newrelic_bundle" {
 
   set {
     name  = "pixie-chart.clusterName"
-    value = google_container_cluster.primary.name
+    value = var.google_container_cluster_primary_name
   }
 }

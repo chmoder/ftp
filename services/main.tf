@@ -6,12 +6,12 @@ resource "kubernetes_service_v1" "example" {
 
   spec {
     selector = {
-      app = kubernetes_deployment_v1.example.spec[0].selector[0].match_labels.app
+      app = var.kubernetes_deployment_v1_example_spec[0].selector[0].match_labels.app
     }
 
     port {
       port        = 8443
-      target_port = kubernetes_deployment_v1.example.spec[0].template[0].spec[0].container[0].port[0].name
+      target_port = var.kubernetes_deployment_v1_example_spec[0].template[0].spec[0].container[0].port[0].name
       protocol    = "TCP"
     }
 
@@ -21,6 +21,4 @@ resource "kubernetes_service_v1" "example" {
   timeouts {
     create = "3m"
   }
-
-  depends_on = [google_compute_global_address.ingress, module.cert_manager]
 }
